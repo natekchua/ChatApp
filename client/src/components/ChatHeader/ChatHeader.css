@@ -1,0 +1,29 @@
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #c31fff;
+  border-radius: 4px 4px 0 0;
+  height: 60px;
+  width: 100%;
+  font-size: 20px;
+}
+
+.left-container {
+  flex: 0.5;
+  display: flex;
+  align-items: center;
+  margin-left: 5%;
+  color: white;
+}
+
+.right-container {
+  display: flex;
+  flex: 0.5;
+  justify-content: flex-end;
+  margin-right: 5%;
+}
+
+.activeIcon {
+  margin-right: 5%;
+}

@@ -1,0 +1,33 @@
+.side-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 100px;
+  color: white;
+  height: 60%;
+  justify-content: space-between;
+}
+
+.active-users {
+  display: flex;
+  align-items: center;
+  margin-bottom: 50%;
+}
+
+.active-item {
+  display: flex;
+  align-items: center;
+}
+
+.active-users img {
+  padding-left: 10px;
+}
+
+.side-content h1 {
+  margin-bottom: 0px;
+}
+
+@media (min-width: 320px) and (max-width: 1200px) {
+  .side-content {
+    display: none;
+  }
+}
