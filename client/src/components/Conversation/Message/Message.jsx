@@ -4,7 +4,7 @@ import './Message.css';
 
 const Message = (props) => {
   const { message, name } = props;
-  const { text, user } = message;
+  const { text, user, time } = message;
 
   let isCurrentUser = false;
   const trimmedName = name.trim().toLowerCase();
@@ -18,9 +18,11 @@ const Message = (props) => {
           <div className="message-box bg-blue">
             <p style={{ color: '#fff'}} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>
+          <p className="timestamp">{time}</p>
         </div>
       ) : (
         <div className="message-container justify-start">
+          <p className="timestamp">{time}</p>
           <div className="message-box bg-light">
             <p style={{ color: '#353535' }} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>

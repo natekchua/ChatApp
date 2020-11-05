@@ -35,6 +35,13 @@
   letter-spacing: 0.3px;
 }
 
+.timestamp {
+  color: #828282;
+  font-size: 12px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
 .pl-10 {
   padding-left: 10px;
 }

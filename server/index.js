@@ -4,6 +4,7 @@ const io = require('socket.io')(server);
 const { addUser, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
 const PORT = process.env.PORT || 3000;
 const router = require('./router');
+const moment = require('moment');
 
 app.use(router);
 
@@ -13,23 +14,22 @@ io.on('connect', (socket) => {
     if (error) return callback(error);
 
     socket.join(user.room);
-
-    socket.emit('message', { user: 'Moderator', text: `Welcome, ${user.name} to room ${user.room}!`});
-    socket.broadcast.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has joined!`});
+    
+    socket.broadcast.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has joined the room!`, time: moment().format("hh:mm a").toString()});
     io.to(user.room).emit('roomData', { room: user.room, users: getActiveUsers(user.room) })
     callback();
   });
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
-    io.to(user.room).emit('message', { user: user.name, text: message });
+    io.to(user.room).emit('message', { user: user.name, text: message, time: moment().format("hh:mm a").toString()});
     callback();
   });
 
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has left.`});
+      io.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has left.`, time: moment().format("hh:mm a").toString()});
       io.to(user.room).emit('roomData', { room: user.room, users: getActiveUsers(user.room)});
     }
   })
