@@ -4,7 +4,8 @@ import activeIcon from '../../icons/activeIcon.png';
 import './SideContent.css';
 
 const SideContent = (props) => {
-  const { users } = props
+  const { users, username } = props
+
   return (
     <div className="side-content">
     {
@@ -17,6 +18,7 @@ const SideContent = (props) => {
                 {users.map(({name}) => (
                   <div key={name} className="active-item">
                     {name}
+                    {username === name ? ' (you)' : null}
                     <img alt="Online Icon" src={activeIcon}/>
                   </div>
                 ))}

@@ -59,7 +59,7 @@ const Chat = (props) => {
           sendMessage={sendMessage}
         />
       </div>
-      <SideContent users={users}/>
+      <SideContent users={users} username={name}/>
     </div>
   )
 }
