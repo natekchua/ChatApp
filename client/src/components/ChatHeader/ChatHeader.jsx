@@ -1,16 +1,11 @@
 import React from 'react';
 import './ChatHeader.css';
-import closeIcon from '../../icons/closeIcon.png';
 
-const ChatHeader = (props) => {
-  const { room } = props
+const ChatHeader = () => {
   return (
     <div className="chat-header">
       <div className="left-container">
-        <h3>Room Name: {room}</h3>
-      </div>
-      <div className="right-container">
-        <a href='/'><img src={closeIcon} alt="close"/></a>
+        <h3>Nate's Super Fancy Chat Room!</h3>
       </div>
     </div>
   )

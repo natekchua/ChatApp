@@ -6,15 +6,11 @@ const Message = (props) => {
   const { message, name } = props;
   const { text, user, time } = message;
 
-  let isCurrentUser = false;
-  const trimmedName = name.trim().toLowerCase();
-  if (user === trimmedName) isCurrentUser = true;
-
   return (
-    isCurrentUser
+    name === user
       ? (
         <div className="message-container justify-end">
-          <p className="sent-text pr-10">{trimmedName}</p>
+          <p className="sent-text pr-10">{name}</p>
           <div className="message-box bg-blue">
             <p style={{ color: '#fff'}} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>

@@ -9,28 +9,30 @@ const moment = require('moment');
 app.use(router);
 
 io.on('connect', (socket) => {
-  socket.on('join', ({ name, room }, callback) => {
-    const { error, user } = addUser({ id: socket.id, name, room });
+  const room = `Nate's Chat Room`;
+  socket.on('join', (callback) => {
+    const { error, user } = addUser({ id: socket.id });
     if (error) return callback(error);
 
-    socket.join(user.room);
-    
-    socket.broadcast.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has joined the room!`, time: moment().format("hh:mm a").toString()});
-    io.to(user.room).emit('roomData', { room: user.room, users: getActiveUsers(user.room) })
+    socket.join(room);
+
+    socket.emit('notification', { user: user.name, text: `Hi ${user.name}, Welcome to ${room}!` });
+    socket.broadcast.to(room).emit('message', { user: 'Moderator', text: `${user.name} has joined the room!`, time: moment().format("hh:mm a").toString()});
+    io.to(room).emit('roomData', { room: room, users: getActiveUsers() })
     callback();
   });
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
-    io.to(user.room).emit('message', { user: user.name, text: message, time: moment().format("hh:mm a").toString()});
+    io.to(room).emit('message', { user: user.name, text: message, time: moment().format("hh:mm a").toString()});
     callback();
   });
 
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('message', { user: 'Moderator', text: `${user.name} has left.`, time: moment().format("hh:mm a").toString()});
-      io.to(user.room).emit('roomData', { room: user.room, users: getActiveUsers(user.room)});
+      io.to(room).emit('message', { user: 'Moderator', text: `${user.name} has left.`, time: moment().format("hh:mm a").toString()});
+      io.to(room).emit('roomData', { room: room, users: getActiveUsers()});
     }
   })
 });

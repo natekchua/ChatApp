@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import queryString from 'query-string';
+import { Alert } from 'antd';
+import 'antd/dist/antd.css';
 import io from 'socket.io-client';
 import ChatHeader from '../ChatHeader/ChatHeader';
 import Input from '../Input/Input';
 import Conversation from '../Conversation/Conversation';
 import SideContent from '../SideContent/SideContent';
+
 import './Chat.css';
 
 let socket; 
@@ -12,24 +14,24 @@ let socket;
 const Chat = (props) => {
   const { location } = props;
   const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-
+  const [notification, setNotification] = useState('');
   const ENDPOINT = 'localhost:3000';
 
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
     socket = io(ENDPOINT);
-    setName(name);
-    setRoom(room);
-    socket.emit('join', { name, room }, (error) => {
+    socket.emit('join', (error) => {
       if(error) alert(error);
     });
   }, [ENDPOINT, location.search]);
 
   useEffect(() => {
+    socket.on('notification', (notification) => {
+      setNotification(notification.text)
+      setName(notification.user);
+    })
     socket.on('message', (message) => {
       setMessages(messages => [...messages, message])
     })
@@ -48,7 +50,14 @@ const Chat = (props) => {
   return (
     <div className="outer-container">
       <div className="container">
-        <ChatHeader room={room}/>
+        <ChatHeader />
+        <Alert 
+          message={notification}
+          type="info"
+          showIcon
+          banner
+          closable
+        />
         <Conversation 
           messages={messages}
           name={name}

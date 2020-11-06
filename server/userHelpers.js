@@ -1,9 +1,14 @@
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 const users = [];
 
-const addUser = ({ id, name, room }) => {
-  const existingUser = users.find((user) => user.room === room && user.name === name)
-  if (existingUser) return { error: 'Username is already taken.' };
-  const user = { id, name, room };
+const addUser = ({ id }) => {
+  const name = uniqueNamesGenerator({
+    dictionaries: [colors, animals],
+    separator: '',
+    style: 'capital'
+  })
+  if(users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
+  const user = { id, name };
   users.push(user);
   return { user };
 }
@@ -15,7 +20,7 @@ const removeUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id);
 
-const getActiveUsers = (room) => users.filter((user) => user.room === room);
+const getActiveUsers = () => users;
 
 module.exports = {
   addUser,
