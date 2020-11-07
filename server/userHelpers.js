@@ -15,7 +15,7 @@ const addUser = ({ id }) => {
 
 const updateUser = (id, name) => {
   const userToUpdate = getUser(id);
-  if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
+  if (users.find((user) => user.name === name)) return false;
   userToUpdate.name = name;
   return userToUpdate;
 }

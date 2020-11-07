@@ -27,8 +27,9 @@ io.on('connect', (socket) => {
     if (message.trim().startsWith('/name ')) {
       const newNameCmd = message.trim().split(' ');
       const updatedName = newNameCmd[1];
-      message = `${user.name} has changed their name to ${updatedName}!`;
+      message = `${user.name} has changed their name to '${updatedName}'!`;
       const updatedUser = updateUser(socket.id, updatedName);
+      if (!updatedUser) message = `The name '${updatedName}' has already been taken.`;
       io.to(room).emit('message', { user: 'Moderator', text: message, newName: updatedUser.name, time: moment().format("hh:mm a").toString(), users: getActiveUsers() });
     } else {
       io.to(room).emit('message', { id: user.id, user: user.name, text: message, time: moment().format("hh:mm a").toString()});
