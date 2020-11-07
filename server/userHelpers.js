@@ -1,4 +1,4 @@
-const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+const { uniqueNamesGenerator, colors, animals } = require('unique-names-generator');
 const users = [];
 
 const addUser = ({ id }) => {
@@ -7,10 +7,17 @@ const addUser = ({ id }) => {
     separator: '',
     style: 'capital'
   })
-  if(users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
+  if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
   const user = { id, name };
   users.push(user);
   return { user };
+}
+
+const updateUser = (id, name) => {
+  const userToUpdate = getUser(id);
+  if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
+  userToUpdate.name = name;
+  return userToUpdate;
 }
 
 const removeUser = (id) => {
@@ -24,6 +31,7 @@ const getActiveUsers = () => users;
 
 module.exports = {
   addUser,
+  updateUser,
   removeUser,
   getUser,
   getActiveUsers

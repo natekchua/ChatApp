@@ -1,7 +1,7 @@
 const app = require('express')();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const { addUser, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
+const { addUser, updateUser, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
 const PORT = process.env.PORT || 3000;
 const router = require('./router');
 const moment = require('moment');
@@ -16,15 +16,23 @@ io.on('connect', (socket) => {
 
     socket.join(room);
 
-    socket.emit('notification', { user: user.name, text: `Hi ${user.name}, Welcome to ${room}!` });
+    socket.emit('notification', { id: user.id, user: user.name, text: `Hi ${user.name}, Welcome to ${room}!` });
     socket.broadcast.to(room).emit('message', { user: 'Moderator', text: `${user.name} has joined the room!`, time: moment().format("hh:mm a").toString()});
     io.to(room).emit('roomData', { room: room, users: getActiveUsers() })
     callback();
   });
 
   socket.on('sendMessage', (message, callback) => {
-    const user = getUser(socket.id);
-    io.to(room).emit('message', { user: user.name, text: message, time: moment().format("hh:mm a").toString()});
+    let user = getUser(socket.id);
+    if (message.trim().startsWith('/name ')) {
+      const newNameCmd = message.trim().split(' ');
+      const updatedName = newNameCmd[1];
+      message = `${user.name} has changed their name to ${updatedName}!`;
+      const updatedUser = updateUser(socket.id, updatedName);
+      io.to(room).emit('message', { user: 'Moderator', text: message, newName: updatedUser.name, time: moment().format("hh:mm a").toString(), users: getActiveUsers() });
+    } else {
+      io.to(room).emit('message', { id: user.id, user: user.name, text: message, time: moment().format("hh:mm a").toString()});
+    }
     callback();
   });
 

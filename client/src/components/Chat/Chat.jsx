@@ -18,6 +18,7 @@ const Chat = (props) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState('');
+  const [id, setID] = useState('');
   const ENDPOINT = 'localhost:3000';
 
   useEffect(() => {
@@ -31,8 +32,13 @@ const Chat = (props) => {
     socket.on('notification', (notification) => {
       setNotification(notification.text)
       setName(notification.user);
+      setID(notification.id);
     })
     socket.on('message', (message) => {
+      if (message.newName) {
+        setName(message.newName);
+        setUsers(message.users);
+      }
       setMessages(messages => [...messages, message])
     })
     socket.on("roomData", ({ users }) => {
@@ -60,7 +66,7 @@ const Chat = (props) => {
         />
         <Conversation 
           messages={messages}
-          name={name}
+          id={id}
         />
         <Input
           message={message}
@@ -68,7 +74,11 @@ const Chat = (props) => {
           sendMessage={sendMessage}
         />
       </div>
-      <SideContent users={users} username={name}/>
+      <SideContent
+        users={users} 
+        username={name} 
+        userID={id}
+      />
     </div>
   )
 }

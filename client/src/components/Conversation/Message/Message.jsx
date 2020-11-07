@@ -3,14 +3,14 @@ import ReactEmoji from 'react-emoji';
 import './Message.css';
 
 const Message = (props) => {
-  const { message, name } = props;
+  const { message, id } = props;
   const { text, user, time } = message;
 
   return (
-    name === user
+    message.id === id
       ? (
         <div className="message-container justify-end">
-          <p className="sent-text pr-10">{name}</p>
+          <p className="sent-text pr-10">{user}</p>
           <div className="message-box bg-blue">
             <p style={{ color: '#fff'}} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>
