@@ -19,6 +19,8 @@ const Chat = (props) => {
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState('');
   const [id, setID] = useState('');
+  const [userColor, setUserColor] = useState('');
+
   const ENDPOINT = 'localhost:3000';
 
   useEffect(() => {
@@ -33,14 +35,18 @@ const Chat = (props) => {
       setNotification(notification.text)
       setName(notification.user);
       setID(notification.id);
-    })
+    });
     socket.on('message', (message) => {
       if (message.newName) {
         setName(message.newName);
         setUsers(message.users);
       }
+      if(message.color) {
+        console.log(message.color);
+        setUserColor(message.color);
+      }
       setMessages(messages => [...messages, message])
-    })
+    });
     socket.on("roomData", ({ users }) => {
       setUsers(users);
     });

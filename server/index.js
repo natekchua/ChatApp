@@ -31,6 +31,13 @@ io.on('connect', (socket) => {
       const updatedUser = updateUser(socket.id, updatedName);
       if (!updatedUser) message = `The name '${updatedName}' has already been taken.`;
       io.to(room).emit('message', { user: 'Moderator', text: message, newName: updatedUser.name, time: moment().format("hh:mm a").toString(), users: getActiveUsers() });
+    } else if (message.trim().startsWith('/color ')) {
+      const colorCmd = message.trim().split(' ');
+      const colorOfName = colorCmd[1];
+      const valid = /^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(colorOfName);
+      message = `${user.name} has changed the color of their name to #${colorOfName}!`;
+      if (!valid) message = `@${user.name}, You entered an invalid color value. Use RGB or RRGGBB.`;
+      io.to(room).emit('message', { user: 'Moderator', text: message, color: `#${colorOfName}`,  time: moment().format("hh:mm a").toString()});
     } else {
       io.to(room).emit('message', { id: user.id, user: user.name, text: message, time: moment().format("hh:mm a").toString()});
     }
