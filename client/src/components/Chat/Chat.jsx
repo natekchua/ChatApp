@@ -67,6 +67,7 @@ const Chat = (props) => {
         />
         <Conversation 
           messages={messages}
+          users={users}
           id={id}
         />
         <Input

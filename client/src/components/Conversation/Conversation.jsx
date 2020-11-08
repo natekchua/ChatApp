@@ -4,25 +4,25 @@ import Message from './Message/Message'
 import './Conversation.css';
 
 const Conversation = (props) => {
-  const { messages, id } = props;
+  const { messages, users, id } = props;
 
-  if (messages.length > 0) {
-    const currUserIDmessages = messages.filter(m => m.user.id === id);
-    if (currUserIDmessages.length > 0) {
-      const mostRecentMessage = currUserIDmessages[currUserIDmessages.length - 1];
-      const newestUserColor = mostRecentMessage.user.color;
+  // iterate through a user's messages and update the user color for every outdated message.
+  if (users && messages) {
+    users.forEach(u => {
       messages.map(m => {
-        if(m.user.id === id && !m.mod) {
-          let messageToUpdate = Object.assign({}, m);
-          messageToUpdate.user.color = newestUserColor;
-          return messageToUpdate;
-        } else {
+        if (m.user.id === u.id && !m.mod) {
+          if (m.user.color !== u.color) {
+            let messageToUpdate = Object.assign({}, m);
+            messageToUpdate.user.color = u.color;
+            return messageToUpdate;
+          }
           return m;
         }
-      })
-    }
+        return m;
+      })  
+    })
   }
-
+ 
   return (
   <ScrollToBottom className="messages">
     {messages.map((message, i) =>
