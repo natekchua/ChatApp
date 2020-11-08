@@ -7,10 +7,10 @@ const Message = (props) => {
   const { text, user, time } = message;
 
   return (
-    message.id === id
+    !message.mod && user.id === id
       ? (
         <div className="message-container justify-end">
-          <p className="sent-text pr-10">{user}</p>
+          <p style={{ color: user.color }} className="sent-text pr-10">{user.name}</p>
           <div className="message-box bg-blue">
             <p style={{ color: '#fff'}} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>
@@ -22,7 +22,7 @@ const Message = (props) => {
           <div className="message-box bg-light">
             <p style={{ color: '#353535' }} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>
-          <p className="sent-text pl-10">{user}</p>
+          <p style={{ color: message.mod ? '#000' : user.color }} className="sent-text pl-10">{ message.mod ? message.mod : user.name }</p>
         </div>
       )
   )

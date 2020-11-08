@@ -7,17 +7,23 @@ const addUser = ({ id }) => {
     separator: '',
     style: 'capital'
   })
+  const color = '#f57b42';
   if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
-  const user = { id, name };
+  const user = { id, name, color };
   users.push(user);
   return { user };
 }
 
-const updateUser = (id, name) => {
+const updateUsername = (id, name) => {
   const userToUpdate = getUser(id);
   if (users.find((user) => user.name === name)) return false;
   userToUpdate.name = name;
   return userToUpdate;
+}
+
+const updateUserColor = (id, color) => {
+  const userToUpdate = getUser(id);
+  userToUpdate.color = color;
 }
 
 const removeUser = (id) => {
@@ -31,7 +37,8 @@ const getActiveUsers = () => users;
 
 module.exports = {
   addUser,
-  updateUser,
+  updateUsername,
+  updateUserColor,
   removeUser,
   getUser,
   getActiveUsers
