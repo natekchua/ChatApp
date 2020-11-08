@@ -2,6 +2,10 @@
   font-family: 'Raleway', sans-serif;
 }
 
+p {
+  margin-bottom: 0 !important;
+}
+
 h1, h2, h3 {
   color: #fff !important;
 }

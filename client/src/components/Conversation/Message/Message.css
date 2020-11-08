@@ -1,10 +1,10 @@
 .message-box {
   background: #F3F3F3;
   border-radius: 20px;
-  padding: 5px 20px;
+  padding: 15px;
   color: white;
   display: inline-block;
-  max-width: 80%;
+  max-width: 55%;
 }
 
 .message-text {
@@ -16,14 +16,9 @@
   word-wrap: break-word;
 }
 
-.message-text img {
-  vertical-align: middle;
-}
-
 .message-container {
   display: flex;
-  justify-content: flex-end;
-  padding: 0 5%;
+  padding: 0.5% 2.5%;
   margin-top: 3px;
 }
 
@@ -38,8 +33,7 @@
 .timestamp {
   color: #828282;
   font-size: 12px;
-  padding: 5px;
-  margin-bottom: 5px;
+  align-self: center;
 }
 
 .pl-10 {
@@ -54,12 +48,12 @@
   justify-content: flex-start;
 }
 
-.justifyStart {
+.justify-end {
   justify-content: flex-end;
 }
 
 .bg-blue {
-  background: #c31fff;
+  background: #ec1fff;
 }
 
 .bg-light {

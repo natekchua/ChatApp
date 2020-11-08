@@ -22,17 +22,19 @@ const Conversation = (props) => {
       })  
     })
   }
- 
+
   return (
-  <ScrollToBottom className="messages">
-    {messages.map((message, i) =>
-    <div key={i}>
-      <Message 
-        message={message}
-        id={id}
-      />
-    </div>)}
-  </ScrollToBottom>
+    <div className="convo-container">
+      <div id="convo">
+        {messages.map((message, i) =>
+        <div key={i}>
+          <Message 
+            message={message}
+            id={id}
+          />
+        </div>)}
+      </div>
+    </div>
   )
 }
 

@@ -14,11 +14,11 @@ const Message = (props) => {
           <div className="message-box bg-blue">
             <p style={{ color: '#fff'}} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>
-          <p className="timestamp">{time}</p>
+          <p className="timestamp pl-10">{time}</p>
         </div>
       ) : (
         <div className="message-container justify-start">
-          <p className="timestamp">{time}</p>
+          <p className="timestamp pr-10">{time}</p>
           <div className="message-box bg-light">
             <p style={{ color: '#353535' }} className="message-text">{ReactEmoji.emojify(text)}</p>
           </div>

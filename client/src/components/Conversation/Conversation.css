@@ -1,6 +1,18 @@
   
-.messages {
-  padding: 5% 0;
+.convo-container {
+  padding: 2% 0;
   overflow: auto;
   flex: auto;
+  position: relative;
+}
+
+#convo {
+  display: flex;
+  padding: 6px 0;
+  overflow: auto;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  bottom: 0;
+  position: absolute;
 }

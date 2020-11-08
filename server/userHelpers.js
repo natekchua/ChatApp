@@ -7,7 +7,7 @@ const addUser = ({ id }) => {
     separator: '',
     style: 'capital'
   })
-  const color = '#f57b42';
+  const color = '#828282';
   if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
   const user = { id, name, color };
   users.push(user);
