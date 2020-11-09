@@ -35,12 +35,12 @@ const Chat = (props) => {
       setName(notification.mod);
       setID(notification.user.id);
     });
-    socket.on('message', (message) => {
+    socket.on('message', (message, chatHistory) => {
       if (message.mod) {
         if (message.newName) setName(message.newName);
         setUsers(message.users);
       }
-      setMessages(messages => [...messages, message])
+      setMessages(chatHistory);
     });
     socket.on("roomData", ({ users }) => {
       setUsers(users);
