@@ -27,3 +27,10 @@ input:focus, textarea:focus, select:focus{
   border: none;
   width: 18%;
 }
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .send-button {
+    font-weight: 500;
+    font-size: 15px;
+  }
+}

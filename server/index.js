@@ -1,11 +1,12 @@
 const app = require('express')();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const { addUser, updateUsername, updateUserColor, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
-const { configureMessages } = require('./messageHelpers.js');
-const PORT = process.env.PORT || 3000;
 const router = require('./router');
 const moment = require('moment');
+const { addUser, updateUsername, updateUserColor, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
+const { configureMessages } = require('./messageHelpers.js');
+
+const PORT = process.env.PORT || 3000;
 
 app.use(router);
 

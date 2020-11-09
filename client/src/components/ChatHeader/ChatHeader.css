@@ -7,17 +7,20 @@
   height: 60px;
   width: 100%;
   font-size: 20px;
+  text-align: center;
+  padding: 30px;
 }
 
 .left-container {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   color: white !important;
 }
 
-
-.activeIcon {
-  margin-right: 5%;
+@media (min-width: 320px) and (max-width: 480px) {
+  h3 {
+    font-size: 18px;
+  }
 }

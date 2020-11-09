@@ -1,5 +1,5 @@
 import React from 'react';
-import activeIcon from '../../icons/activeIcon.png';
+import { Badge } from 'antd';
 
 import './SideContent.css';
 
@@ -18,7 +18,7 @@ const SideContent = (props) => {
                 {users.map(({id, name}) => (
                   <div key={id} className="active-item">
                     {id === userID ? `${name} (you)` : `${name}`}
-                    <img alt="Online Icon" src={activeIcon}/>
+                    <Badge style={{ padding: '0 12px' }}status="processing" />
                   </div>
                 ))}
               </h2>

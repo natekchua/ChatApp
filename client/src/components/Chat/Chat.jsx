@@ -11,8 +11,7 @@ import './Chat.css';
 
 let socket; 
 
-const Chat = (props) => {
-  const { location } = props;
+const Chat = () => {
   const [name, setName] = useState('');
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
@@ -27,7 +26,7 @@ const Chat = (props) => {
     socket.emit('join', (error) => {
       if(error) alert(error);
     });
-  }, [ENDPOINT, location.search]);
+  }, [ENDPOINT]);
 
   useEffect(() => {
     socket.on('notification', (notification) => {
