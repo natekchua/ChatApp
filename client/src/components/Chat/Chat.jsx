@@ -41,9 +41,9 @@ const Chat = () => {
       }
       setMessages(chatHistory);
     });
-    socket.on("roomData", ({ users }) => {
+    socket.on('roomData', ({ users }) => {
       setUsers(users);
-    });
+    }); 
   }, []);
 
   const sendMessage = (e) => {
@@ -56,7 +56,10 @@ const Chat = () => {
   return (
     <div className="outer-container">
       <div className="container">
-        <ChatHeader />
+        <ChatHeader 
+          username={name} 
+          userID={id}
+        />
         <Alert 
           message={notification}
           type="info"

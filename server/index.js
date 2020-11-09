@@ -8,13 +8,22 @@ const { configureMessages } = require('./messageHelpers.js');
 
 const PORT = process.env.PORT || 3000;
 
+let currentUserConfig = null;
+
 app.use(router);
 
 io.on('connect', (socket) => {
   const room = `Nate's Chat Room`;
+  let currUserID = currentUserConfig ? currentUserConfig.id : socket.id;
+
+  socket.on('handleLocalStorage', (localStorage) => {
+    console.log(localStorage);
+    currentUserConfig = localStorage;
+    currUserID = localStorage.id;
+  })
 
   socket.on('join', (callback) => {
-    const { error, user } = addUser({ id: socket.id });
+    const { error, user } = addUser({ id: currUserID }, currentUserConfig);
     if (error) return callback(error);
 
     socket.join(room);
@@ -28,7 +37,7 @@ io.on('connect', (socket) => {
   });
 
   socket.on('sendMessage', (message, callback) => {
-    let user = getUser(socket.id);
+    let user = getUser(currUserID);
     let messageObj;
     let chatHistory;
 
@@ -36,7 +45,7 @@ io.on('connect', (socket) => {
       const newNameCmd = message.trim().split(' ');
       const updatedName = newNameCmd[1];
       message = `${user.name} has changed their name to '${updatedName}'!`;
-      const updatedUser = updateUsername(socket.id, updatedName);
+      const updatedUser = updateUsername(currUserID, updatedName);
       if (!updatedUser) message = `The name '${updatedName}' has already been taken.`;
       messageObj = { mod: 'Moderator', user: user, text: message, newName: updatedUser.name, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
@@ -49,7 +58,7 @@ io.on('connect', (socket) => {
       } else {
         let colorOfName = colorCmd[1];
         if(colorOfName.charAt(0) !== '#') colorOfName = `#${colorOfName}`;
-        updateUserColor(socket.id, colorOfName);
+        updateUserColor(currUserID, colorOfName);
         message = `${user.name} has changed the color of their name to ${colorOfName}!`;
       }
       messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
@@ -64,7 +73,7 @@ io.on('connect', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    const user = removeUser(socket.id);
+    const user = removeUser(currUserID);
     if (user) {
       const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has left.`, time: moment().format("hh:mm a").toString() };
       const chatHistory = configureMessages(messageObj);
