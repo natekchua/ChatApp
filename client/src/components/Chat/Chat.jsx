@@ -56,10 +56,7 @@ const Chat = () => {
   return (
     <div className="outer-container">
       <div className="container">
-        <ChatHeader 
-          username={name} 
-          userID={id}
-        />
+        <ChatHeader />
         <Alert 
           message={notification}
           type="info"

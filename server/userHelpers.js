@@ -8,23 +8,10 @@ const getRandomName = () => {
     style: 'capital'
   });
 }
-const addUser = ({ id }, currentUserConfig) => {
-  let name
-  if (!currentUserConfig) {
-    name = getRandomName();
-  } else {  // handle a previous user who is logging back in.
-    name = currentUserConfig.username;
-    id = currentUserConfig.id;
-  }
-  
+const addUser = ({ id }) => {
+  const name = getRandomName(); 
   const color = '#828282';
-  if (users.find((user) => user.name === name)) {
-    if (currentUserConfig) {  // assign random user to existing user if someone took the user's name while logged out.
-      name = getRandomName();
-    } else {
-      return { error: 'Username is already taken.' };
-    }
-  }
+  if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
   const user = { id, name, color };
   users.push(user);
   return { user };
