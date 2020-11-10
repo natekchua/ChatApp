@@ -6,6 +6,8 @@ const addMessage = (message) => {
 
 const getMessages = () => messages;
 
+const clearMessages = () => messages = [];
+
 // helper to ensure each message is sent & the chat history has at most 200 messages.
 const configureMessages = (messageObj) => {
   addMessage(messageObj);
@@ -14,4 +16,4 @@ const configureMessages = (messageObj) => {
   return allMessages;
 }
 
-module.exports = { configureMessages };
+module.exports = { clearMessages, configureMessages };

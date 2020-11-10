@@ -6,7 +6,7 @@ const moment = require('moment');
 const cors = require('cors');
 
 const { addUser, updateUsername, updateUserColor, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
-const { configureMessages } = require('./messageHelpers.js');
+const { configureMessages, clearMessages } = require('./messageHelpers.js');
 
 const PORT = process.env.PORT || 3000;
 
@@ -35,6 +35,13 @@ io.on('connect', (socket) => {
     let messageObj;
     let chatHistory;
 
+    if (message.length > 1600) {
+      messageObj = { mod: 'Moderator', user: user, text: `@${user.name}, that message is too long.`, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      chatHistory = configureMessages(messageObj);
+      io.to(room).emit('message', messageObj, chatHistory);
+      return;
+    }
+
     if (message.trim().startsWith('/name ')) {
       const newNameCmd = message.trim().split(' ');
       const updatedName = newNameCmd[1];
@@ -58,6 +65,8 @@ io.on('connect', (socket) => {
       messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
+    } else if (message === '/superSecretClearCommand123') {
+      clearMessages();
     } else {
       messageObj = { user: user, text: message, time: moment().format("hh:mm a").toString() };
       chatHistory = configureMessages(messageObj);
@@ -72,6 +81,8 @@ io.on('connect', (socket) => {
       const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has left.`, time: moment().format("hh:mm a").toString() };
       const chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
+      const allCurrentUsers = getActiveUsers();
+      if (!allCurrentUsers.length) clearMessages();
       io.to(room).emit('roomData', { room: room, users: getActiveUsers() });
     }
   })
