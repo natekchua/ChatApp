@@ -1,7 +1,8 @@
 import React from 'react';
-import './ChatHeader.css';
 import ReactEmoji from 'react-emoji';
 import closeIcon from '../../icons/closeIcon.png';
+
+import './ChatHeader.css';
 
 const ChatHeader = () => {
 
@@ -9,7 +10,7 @@ const ChatHeader = () => {
     <div className="chat-header">
       <div className="left-container">
         <p>{ReactEmoji.emojify(':)')}</p>
-        <h3>Nate's Chat Room</h3>
+        <h3 style={{ fontWeight: 600, marginTop: '5px' }}>Nate's Chat Room</h3>
         <a href='/' onClick={() => test()}><img src={closeIcon} alt="close"/></a>
       </div>
     </div>

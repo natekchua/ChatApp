@@ -8,6 +8,7 @@ const getRandomName = () => {
     style: 'capital'
   });
 }
+
 const addUser = ({ id }) => {
   const name = getRandomName(); 
   const color = '#828282';

@@ -6,6 +6,7 @@ import ChatHeader from '../ChatHeader/ChatHeader';
 import Input from '../Input/Input';
 import Conversation from '../Conversation/Conversation';
 import SideContent from '../SideContent/SideContent';
+import ToolTip from '../ToolTip/ToolTip';
 
 import './Chat.css';
 
@@ -55,6 +56,7 @@ const Chat = () => {
 
   return (
     <div className="outer-container">
+      <ToolTip />
       <div className="container">
         <ChatHeader />
         <Alert 

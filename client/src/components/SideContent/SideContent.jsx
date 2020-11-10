@@ -12,7 +12,7 @@ const SideContent = (props) => {
       users
         ? (
           <div>
-            <h1>Active users:</h1>
+            <h1 className='active-users-header'>Active users</h1>
             <div className="active-users">
               <h2>
                 {users.map(({id, name}) => (
