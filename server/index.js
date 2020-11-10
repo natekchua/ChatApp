@@ -65,8 +65,12 @@ io.on('connect', (socket) => {
       messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
-    } else if (message === '/superSecretClearCommand123') {
+    } else if (message === '/super_secret_admin_clear_command') {
       clearMessages();
+      message = 'All messages have been cleared.';
+      messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      chatHistory = configureMessages(messageObj);
+      io.to(room).emit('message', messageObj, chatHistory);
     } else {
       messageObj = { user: user, text: message, time: moment().format("hh:mm a").toString() };
       chatHistory = configureMessages(messageObj);
@@ -83,7 +87,7 @@ io.on('connect', (socket) => {
       io.to(room).emit('message', messageObj, chatHistory);
       const allCurrentUsers = getActiveUsers();
       if (!allCurrentUsers.length) clearMessages();
-      io.to(room).emit('roomData', { room: room, users: getActiveUsers() });
+      io.to(room).emit('roomData', { room: room, users: allCurrentUsers });
     }
   })
 });
