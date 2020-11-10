@@ -2,7 +2,7 @@ const app = require('express')();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const router = require('./router');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const cors = require('cors');
 
 const { addUser, updateUsername, updateUserColor, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
@@ -23,7 +23,7 @@ io.on('connect', (socket) => {
     socket.join(room);
 
     socket.emit('notification', { mod: user.name, user: user, text: `Hi ${user.name}, Welcome to ${room}!` });
-    const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has joined the room!`, time: moment().format("hh:mm a").toString() };
+    const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has joined the room!`, time: moment.tz('America/Denver').format('hh:mm a').toString() };
     const chatHistory = configureMessages(messageObj);
     io.to(room).emit('message', messageObj, chatHistory);
     io.to(room).emit('roomData', { room: room, users: getActiveUsers() });
@@ -34,21 +34,22 @@ io.on('connect', (socket) => {
     let user = getUser(socket.id);
     let messageObj;
     let chatHistory;
-
+    const timeSent = moment().tz('America/Denver').format('hh:mm a').toString();  // Calgary and Denver are both MST.
+    
     if (message.length > 1600) {
-      messageObj = { mod: 'Moderator', user: user, text: `@${user.name}, that message is too long.`, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      messageObj = { mod: 'Moderator', user: user, text: `@${user.name}, that message is too long.`, time: timeSent, users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
       return;
     }
-
+    
     if (message.trim().startsWith('/name ')) {
       const newNameCmd = message.trim().split(' ');
       const updatedName = newNameCmd[1];
       message = `${user.name} has changed their name to '${updatedName}'!`;
       const updatedUser = updateUsername(socket.id, updatedName);
       if (!updatedUser) message = `The name '${updatedName}' has already been taken.`;
-      messageObj = { mod: 'Moderator', user: user, text: message, newName: updatedUser.name, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      messageObj = { mod: 'Moderator', user: user, text: message, newName: updatedUser.name, time: timeSent, users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
     } else if (message.trim().startsWith('/color ')) {
@@ -62,17 +63,17 @@ io.on('connect', (socket) => {
         updateUserColor(socket.id, colorOfName);
         message = `${user.name} has changed the color of their name to ${colorOfName}!`;
       }
-      messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      messageObj = { mod: 'Moderator', user: user, text: message, time: timeSent, users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
     } else if (message === '/super_secret_admin_clear_command') {
       clearMessages();
       message = 'All messages have been cleared.';
-      messageObj = { mod: 'Moderator', user: user, text: message, time: moment().format("hh:mm a").toString(), users: getActiveUsers() };
+      messageObj = { mod: 'Moderator', user: user, text: message, time: timeSent, users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
     } else {
-      messageObj = { user: user, text: message, time: moment().format("hh:mm a").toString() };
+      messageObj = { user: user, text: message, time: timeSent };
       chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
     }
@@ -82,7 +83,7 @@ io.on('connect', (socket) => {
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
     if (user) {
-      const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has left.`, time: moment().format("hh:mm a").toString() };
+      const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has left.`, time: moment().tz('America/Denver').format('hh:mm a').toString() };
       const chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
       const allCurrentUsers = getActiveUsers();

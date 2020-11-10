@@ -10,8 +10,8 @@ const ToolTip = () => (
   <div className='tool-tip-container'>
     <h1 className='useful-commands-header'>Commands</h1>
     <div className='commands'>
-      <h2><Text style={{ color: '#fff'}} keyboard>/name</Text> : change your name!</h2>
-      <h2><Text style={{ color: '#fff'}} keyboard>/color</Text> : color your name!</h2>
+      <h2><Text style={{ color: '#fff'}} keyboard>/name</Text> to change your name!</h2>
+      <h2><Text style={{ color: '#fff'}} keyboard>/color</Text> to color your name!</h2>
       <h2>Type your favorite emojis:</h2>
         <ul>
           <li><Text style={{ color: '#fff'}} keyboard>:)</Text>{' ---> '}{ReactEmoji.emojify(':)')}</li>
