@@ -3,12 +3,15 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const router = require('./router');
 const moment = require('moment');
+const cors = require('cors');
+
 const { addUser, updateUsername, updateUserColor, removeUser, getUser, getActiveUsers } = require('./userHelpers.js');
 const { configureMessages } = require('./messageHelpers.js');
 
 const PORT = process.env.PORT || 3000;
 
 app.use(router);
+app.use(cors());
 
 io.on('connect', (socket) => {
   const room = `Nate's Chat Room`;
