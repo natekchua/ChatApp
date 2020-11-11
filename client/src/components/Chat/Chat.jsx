@@ -70,7 +70,10 @@ const Chat = () => {
     <div className="outer-container">
       <ToolTip />
       <div className="container">
-        <ChatHeader />
+        <ChatHeader
+          users={users} 
+          userID={id}
+        />
         <Alert 
           message={notification}
           type="info"
