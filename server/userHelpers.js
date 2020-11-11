@@ -9,10 +9,22 @@ const getRandomName = () => {
   });
 }
 
-const addUser = ({ id }) => {
-  const name = getRandomName(); 
-  const color = '#828282';
-  if (users.find((user) => user.name === name)) return { error: 'Username is already taken.' };
+const addUser = ({ id }, reconnectedUser) => {
+  let name
+  let color = '#828282';
+  if (!reconnectedUser) {
+    name = getRandomName();
+  } else {                  // handle a previous user who is logging back in.
+    name = reconnectedUser.name;
+    color = reconnectedUser.color;
+  }
+  if (users.find((user) => user.name === name)) {
+    if (reconnectedUser) {  // assign random name to existing user if someone took the user's previous name.
+      name = getRandomName();
+    } else {
+      return { error: 'Username is already taken.' };
+    }
+  }
   const user = { id, name, color };
   users.push(user);
   return { user };

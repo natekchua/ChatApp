@@ -20,10 +20,18 @@ const Chat = () => {
   const [notification, setNotification] = useState('');
   const [id, setID] = useState('');
 
-  const ENDPOINT = 'https://nates-chat-room.herokuapp.com/';
+  // const ENDPOINT = 'https://nates-chat-room.herokuapp.com/';
+  const ENDPOINT = 'localhost:3000/';
+
 
   useEffect(() => {
     socket = io(ENDPOINT);
+
+    const existingUser = localStorage.getItem('user');
+    if (existingUser) {
+      socket.emit('joinExistingUser', JSON.parse(existingUser));
+    }
+
     socket.emit('join', (error) => {
       if(error) alert(error);
     });
@@ -31,17 +39,24 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on('notification', (notification) => {
+      localStorage.setItem('user', JSON.stringify(notification.user));
       setNotification(notification.text)
       setName(notification.mod);
       setID(notification.user.id);
+      setUsers(notification.users);
     });
+
     socket.on('message', (message, chatHistory) => {
       if (message.mod) {
-        if (message.newName) setName(message.newName);
+        if (message.newName) {
+          setName(message.newName);
+        }
+        localStorage.setItem('user', JSON.stringify(message.user));
         setUsers(message.users);
       }
       setMessages(chatHistory);
     });
+
     socket.on('roomData', ({ users }) => {
       setUsers(users);
     }); 

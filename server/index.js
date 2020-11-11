@@ -15,15 +15,23 @@ app.use(cors());
 
 io.on('connect', (socket) => {
   const room = `Nate's Chat Room`;
+  let socketID = socket.id;
+  let reconnectedUserConfig = null;
+  
+  socket.on('joinExistingUser', (existingUser) => {
+    reconnectedUserConfig = existingUser;
+    console.log(existingUser);
+  });
 
   socket.on('join', (callback) => {
-    const { error, user } = addUser({ id: socket.id });
+    if (reconnectedUserConfig) socketID = reconnectedUserConfig.id;
+    const { error, user } = addUser({ id: socketID }, reconnectedUserConfig);
     if (error) return callback(error);
 
     socket.join(room);
 
     socket.emit('notification', { mod: user.name, user: user, text: `Hi ${user.name}, Welcome to ${room}!` });
-    const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has joined the room!`, time: moment.tz('America/Denver').format('hh:mm a').toString() };
+    const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has joined the room!`, time: moment.tz('America/Denver').format('hh:mm a').toString(),  users: getActiveUsers() };
     const chatHistory = configureMessages(messageObj);
     io.to(room).emit('message', messageObj, chatHistory);
     io.to(room).emit('roomData', { room: room, users: getActiveUsers() });
@@ -31,7 +39,7 @@ io.on('connect', (socket) => {
   });
 
   socket.on('sendMessage', (message, callback) => {
-    let user = getUser(socket.id);
+    let user = getUser(socketID);
     let messageObj;
     let chatHistory;
     const timeSent = moment().tz('America/Denver').format('hh:mm a').toString();  // Calgary and Denver are both MST.
@@ -47,7 +55,7 @@ io.on('connect', (socket) => {
       const newNameCmd = message.trim().split(' ');
       const updatedName = newNameCmd[1];
       message = `${user.name} has changed their name to '${updatedName}'!`;
-      const updatedUser = updateUsername(socket.id, updatedName);
+      const updatedUser = updateUsername(socketID, updatedName);
       if (!updatedUser) message = `The name '${updatedName}' has already been taken.`;
       messageObj = { mod: 'Moderator', user: user, text: message, newName: updatedUser.name, time: timeSent, users: getActiveUsers() };
       chatHistory = configureMessages(messageObj);
@@ -60,7 +68,7 @@ io.on('connect', (socket) => {
       } else {
         let colorOfName = colorCmd[1];
         if(colorOfName.charAt(0) !== '#') colorOfName = `#${colorOfName}`;
-        updateUserColor(socket.id, colorOfName);
+        updateUserColor(socketID, colorOfName);
         message = `${user.name} has changed the color of their name to ${colorOfName}!`;
       }
       messageObj = { mod: 'Moderator', user: user, text: message, time: timeSent, users: getActiveUsers() };
@@ -81,13 +89,12 @@ io.on('connect', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    const user = removeUser(socket.id);
+    const user = removeUser(socketID);
     if (user) {
       const messageObj = { mod: 'Moderator', user: user, text: `${user.name} has left.`, time: moment().tz('America/Denver').format('hh:mm a').toString() };
       const chatHistory = configureMessages(messageObj);
       io.to(room).emit('message', messageObj, chatHistory);
       const allCurrentUsers = getActiveUsers();
-      if (!allCurrentUsers.length) clearMessages();
       io.to(room).emit('roomData', { room: room, users: allCurrentUsers });
     }
   })
