@@ -20,7 +20,6 @@ io.on('connect', (socket) => {
   
   socket.on('joinExistingUser', (existingUser) => {
     reconnectedUserConfig = existingUser;
-    console.log(existingUser);
   });
 
   socket.on('join', (callback) => {

@@ -20,13 +20,10 @@ const Chat = () => {
   const [notification, setNotification] = useState('');
   const [id, setID] = useState('');
 
-  // const ENDPOINT = 'https://nates-chat-room.herokuapp.com/';
-  const ENDPOINT = 'localhost:3000/';
-
+  const ENDPOINT = 'https://nates-chat-room.herokuapp.com/';
 
   useEffect(() => {
     socket = io(ENDPOINT);
-
     const existingUser = localStorage.getItem('user');
     if (existingUser) {
       socket.emit('joinExistingUser', JSON.parse(existingUser));
