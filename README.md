@@ -3,17 +3,17 @@ This is a Chat Room application built using React, Node.js, and Socket.io. This 
 ## Available Scripts
 
 
-In the project directory, you can navigate to the server directory:
+## In the project directory, you can navigate to the server directory:
 
-cd server && npm start
+`cd server && npm start`
 Runs the backend in the development mode.
 
-In the project directory, you can navigate to the client directory:
+## In the project directory, you can navigate to the client directory:
 
-cd client && npm run build
+`cd client && npm run build`
 Builds the app for production to the build folder located in client directory.
 
-cd client && npm start
+`cd client && npm start`
 Runs the frontend in the development mode.
 Open http://localhost:3001 to view it in the browser.
 
