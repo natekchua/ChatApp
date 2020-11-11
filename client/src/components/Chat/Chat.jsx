@@ -24,7 +24,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    const existingUser = localStorage.getItem('user');
+    const existingUser = sessionStorage.getItem('user');
     if (existingUser) {
       socket.emit('joinExistingUser', JSON.parse(existingUser));
     }
@@ -36,7 +36,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on('notification', (notification) => {
-      localStorage.setItem('user', JSON.stringify(notification.user));
+      sessionStorage.setItem('user', JSON.stringify(notification.user));
       setNotification(notification.text)
       setName(notification.mod);
       setID(notification.user.id);
@@ -48,7 +48,7 @@ const Chat = () => {
         if (message.newName) {
           setName(message.newName);
         }
-        localStorage.setItem('user', JSON.stringify(message.user));
+        sessionStorage.setItem('user', JSON.stringify(message.user));
         setUsers(message.users);
       }
       setMessages(chatHistory);
