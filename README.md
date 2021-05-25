@@ -1,4 +1,4 @@
-This is a Chat Room application built using React, Node.js, and Socket.io. This app was made for SENG 513 Web-Based Systems Assignment 3. The deployed app can be found here: https://nates-chat-room.netlify.app/
+This is a Chat Room application built using React, Node.js, and Socket.io. The deployed app can be found here: https://nates-chat-room.netlify.app/
 
 ## Available Scripts
 
